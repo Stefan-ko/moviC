@@ -29,4 +29,15 @@ class Movie extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
     ];
+
+    public function casts()
+    {
+        return $this->hasMany(Cast::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
 }

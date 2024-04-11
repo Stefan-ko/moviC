@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\MovieController;
+use App\Http\Controllers\Admin\CastController;
+use App\Http\Controllers\Admin\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,17 @@ Route::prefix('admin')->group(function () {
     Route::get('/movies/{movie}/edit', [MovieController::class, 'edit'])->name('admin.movies.edit');
     Route::put('/movies/{movie}', [MovieController::class, 'update'])->name('admin.movies.update');
     Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('admin.movies.destroy');
-});
+
+    Route::post('/casts', [CastController::class, 'store'])->name('admin.casts.store');
+    Route::get('/casts/{cast}/edit', [CastController::class, 'edit'])->name('admin.casts.edit');
+    Route::put('/casts', [CastController::class, 'update'])->name('admin.casts.update');
+    Route::delete('/casts/{cast}', [CastController::class, 'destroy'])->name('admin.casts.destroy');
+
+    Route::get('/tags', [TagController::class, 'index'])->name('admin.tags.index');
+    Route::post('/tags', [TagController::class, 'store'])->name('admin.tags.store');
+    Route::get('/tags/create', [TagController::class, 'create'])->name('admin.tags.create');
+    Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('admin.tags.destroy');
+
+})->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
