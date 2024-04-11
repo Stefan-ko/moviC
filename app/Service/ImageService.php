@@ -4,19 +4,19 @@ namespace App\Service;
 
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 class ImageService
 {
+    protected $imageManager;
 
+    public function __construct(ImageManager $imageManager)
+    {
+        $this->imageManager = $imageManager;
+    }
     public function storeAndCropImage($file, $folder, $width, $height)
     {
         $path = $file->store($folder);
         $url = Storage::url($path);
-
-        $imageManager = new ImageManager(
-            new Driver()
-        );
-        $image = $imageManager->read(storage_path('app/' . $path));
+        $image = $this->imageManager->read(storage_path('app/' . $path));
         $image->resize($width, $height);
         $image->save();
 

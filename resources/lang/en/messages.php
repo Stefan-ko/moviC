@@ -47,4 +47,5 @@ return [
     'update_cast_b' => 'Update cast',
     'delete_tag_b' => 'Delete tag',
     'create_tag_b' => 'Create new tag',
+    'details' => 'Details',
 ];

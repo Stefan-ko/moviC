@@ -3,7 +3,15 @@
 @section('content')
 <form action="{{ route('admin.tags.store') }}" method="POST">
     @csrf
-
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <h2 class="text-xl font-bold mt-4">{{ __('messages.tags') }}</h2>
         <div class="mb-4 tag-input">
             <div id="tagsContainer">

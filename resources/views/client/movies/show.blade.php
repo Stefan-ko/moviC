@@ -4,9 +4,10 @@
     <div class="container">
         <h1>{{ $movie->{'title_' . App::getLocale()} }}</h1>
         <p>{{ $movie->{'description_' . App::getLocale()} }}</p>
-        <p>Release Year: {{ $movie->release_year }}</p>
+        <p>{{ __('messages.release_year') }}: {{ $movie->release_year }}</p>
         <img src="{{ asset($movie->poster) }}" class="card-img-top" alt="Poster">
-        <h2>Screenshots:</h2>
+        @if (optional($movie->screenshots)->isNotEmpty())
+        <h2>{{ __('messages.screenshots') }}:</h2>
         <div class="row">
             @foreach ($movie->screenshots as $screenshot)
                 <div class="col-md-4 mb-4">
@@ -14,7 +15,8 @@
                 </div>
             @endforeach
         </div>
-        <h2>Cast:</h2>
+        @endif
+        <h2>{{ __('messages.casts') }}:</h2>
         <ul>
             @foreach ($movie->casts as $actor)
                 <li>{{ $actor->role }}</li>

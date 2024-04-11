@@ -39,7 +39,6 @@ class CastController extends Controller
     public function update(Request $request)
     {
         foreach ($request->cast_role as $key => $role) {
-            if ($request->has('cast_id') && isset($request->cast_id[$key])) {
                 $cast = Cast::find($request->cast_id[$key]);
                 $cast->role = $role;
                 $cast->name_uk = $request->cast_name_uk[$key];
@@ -51,7 +50,6 @@ class CastController extends Controller
                 }
 
                 $cast->save();
-            }
         }
         return redirect()->route('admin.movies.index');
     }

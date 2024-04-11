@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TagStoreRequest;
 use App\Models\Tag;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class TagController extends Controller
@@ -13,7 +13,7 @@ class TagController extends Controller
     {
         $tags = Tag::all();
 
-        return response()->json($tags);
+        return response($tags);
     }
 
     public function create()
@@ -22,7 +22,7 @@ class TagController extends Controller
         return view('admin.tags.create',compact('tags'));
     }
 
-    public function store(Request $request)
+    public function store(TagStoreRequest $request)
     {
         $currentLocale = app()->getLocale();
         foreach ($request->get('tag_name_' . $currentLocale) as $key => $tag_name) {

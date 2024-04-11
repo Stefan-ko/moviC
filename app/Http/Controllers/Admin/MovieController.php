@@ -27,38 +27,31 @@ class MovieController extends Controller
 
     public function store(Request $request)
     {
-        $movie = new Movie($request->except('poster', 'screenshots'));
-        if ($request->hasFile('poster')) {
-            $url = $this->imageService->storeAndCropImage($request->file('poster'), 'public/posters', 300, 300);
-            $movie->poster = $url;
-        }
-        if ($request->hasFile('screenshots')) {
-                $screenshotUrl = $this->imageService->storeAndCropMultipleImages($request->file('screenshots'), 'public/screenshots', 800, 600);
-            $movie->screenshots = $screenshotUrl;
-        }
+        $movieData = $request->except('poster', 'screenshots');
+        $movie = new Movie($movieData);
+
+
+        $this->handlePoster($request, $movie);
+        $this->handleScreenshots($request, $movie);
+
         $movie->save();
 
-        return response($movie);
+        return response()->json(['message' => 'Data saved successfully']);
     }
 
     public function edit(Movie $movie)
     {
-        $casts = $movie->casts;
-        $tags = $movie->tags;
-        return view('admin.movies.edit', compact('movie', 'casts', 'tags'));
+        return view('admin.movies.edit', compact('movie'));
     }
 
     public function update(Request $request, Movie $movie)
     {
-        if ($request->hasFile('poster')) {
-            $url = $this->imageService->storeAndCropImage($request->file('poster'), 'public/posters', 300, 300);
-            $movie->poster = $url;
-        }
-        if ($request->hasFile('screenshots')) {
-            $screenshotUrl = $this->imageService->storeAndCropMultipleImages($request->file('screenshots'), 'public/screenshots', 800, 600);
-            $movie->screenshots = $screenshotUrl;
-        }
-        $movie->update($request->except('poster', 'screenshots'));
+        $movieData = $request->except('poster', 'screenshots');
+        $movie->update($movieData);
+
+        $this->handlePoster($request, $movie);
+        $this->handleScreenshots($request, $movie);
+
         $movie->tags()->sync($request->get('tags'));
         return response($movie);
     }
@@ -67,5 +60,20 @@ class MovieController extends Controller
     {
         $movie->delete();
         return redirect()->route('admin.movies.index');
+    }
+    protected function handlePoster(Request $request, Movie $movie)
+    {
+        if ($request->hasFile('poster')) {
+            $url = $this->imageService->storeAndCropImage($request->file('poster'), 'public/posters', 300, 300);
+            $movie->poster = $url;
+        }
+    }
+
+    protected function handleScreenshots(Request $request, Movie $movie)
+    {
+        if ($request->hasFile('screenshots')) {
+            $screenshotUrl = $this->imageService->storeAndCropMultipleImages($request->file('screenshots'), 'public/screenshots', 800, 600);
+            $movie->screenshots = $screenshotUrl;
+        }
     }
 }

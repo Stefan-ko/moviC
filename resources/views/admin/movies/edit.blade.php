@@ -83,7 +83,7 @@
             <div class="mb-4">
                 <label for="tags" class="block font-medium">{{ __('messages.tags') }}</label>
                 <select name="tags[]" id="tags" class="w-full border-gray-300 rounded-md custom-select" multiple size="5">
-                @foreach ($tags as $tag)
+                @foreach ($movie->tags as $tag)
                         <option value="{{ $tag->id }}" {{ in_array($tag->id, $movie->tags->pluck('id')->toArray()) ? 'selected' : '' }}>
                             {{ $tag->slug }}
                         </option>
@@ -117,8 +117,8 @@
         <form id="castFormUpdate" action="{{ route('admin.casts.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            @if ($casts->isNotEmpty())
-            @foreach ($casts as $cast)
+            @if ($movie->casts->isNotEmpty())
+            @foreach ($movie->casts as $cast)
                 <div class="mb-4">
                     <label for="cast_role_{{ $cast->id }}" class="block font-medium">{{ __('messages.role') }}</label>
                     <select name="cast_role[]" id="cast_role_{{ $cast->id }}">
