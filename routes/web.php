@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\MovieController;
 use App\Http\Controllers\Admin\CastController;
 use App\Http\Controllers\Admin\TagController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Controllers\Client\ClientMovieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +33,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::group(['prefix' => LaravelLocalization::setLocale()], function(){
-Route::prefix('admin')->group(function () {
+
+    Route::get('/movies', [ClientMovieController::class, 'index'])->name('client.movies.index');
+    Route::get('/movies/{movie}', [ClientMovieController::class, 'show'])->name('client.movies.show');
+
+Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/movies', [MovieController::class, 'index'])->name('admin.movies.index');
     Route::get('/movies/create', [MovieController::class, 'create'])->name('admin.movies.create');
     Route::post('/movies', [MovieController::class, 'store'])->name('admin.movies.store');
@@ -50,6 +55,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/tags/create', [TagController::class, 'create'])->name('admin.tags.create');
     Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('admin.tags.destroy');
 
-})->middleware(['auth', 'verified']);
+});
 });
 require __DIR__.'/auth.php';

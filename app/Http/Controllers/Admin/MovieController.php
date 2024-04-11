@@ -9,7 +9,6 @@ use App\Models\Movie;
 
 class MovieController extends Controller
 {
-
     public function __construct(ImageService $imageService)
     {
         $this->imageService = $imageService;
@@ -51,7 +50,15 @@ class MovieController extends Controller
 
     public function update(Request $request, Movie $movie)
     {
-        $movie->update($request->all());
+        if ($request->hasFile('poster')) {
+            $url = $this->imageService->storeAndCropImage($request->file('poster'), 'public/posters', 300, 300);
+            $movie->poster = $url;
+        }
+        if ($request->hasFile('screenshots')) {
+            $screenshotUrl = $this->imageService->storeAndCropMultipleImages($request->file('screenshots'), 'public/screenshots', 800, 600);
+            $movie->screenshots = $screenshotUrl;
+        }
+        $movie->update($request->except('poster', 'screenshots'));
         $movie->tags()->sync($request->get('tags'));
         return response($movie);
     }

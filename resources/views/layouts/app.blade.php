@@ -17,6 +17,7 @@
     <body class="font-sans antialiased">
 
     @extends('layouts.admin')
+    @extends('layouts.client')
 
     @section('content')
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">

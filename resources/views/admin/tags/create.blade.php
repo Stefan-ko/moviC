@@ -1,3 +1,6 @@
+@extends('layouts.admin')
+
+@section('content')
 <form action="{{ route('admin.tags.store') }}" method="POST">
     @csrf
 
@@ -34,6 +37,7 @@
                 </ul>
             @endif
         </div>
+@endsection
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         let tagCount = 1;
