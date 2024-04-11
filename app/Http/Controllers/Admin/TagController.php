@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TagController extends Controller
 {
@@ -23,11 +24,14 @@ class TagController extends Controller
 
     public function store(Request $request)
     {
-        foreach ($request->get('tag_name_uk') as $key => $tag_name_uk) {
+        $currentLocale = app()->getLocale();
+        foreach ($request->get('tag_name_' . $currentLocale) as $key => $tag_name) {
+            $tagSlug = $request->get('tag_slug')[$key] ?? Str::slug($tag_name, '-');
+
             $tag = new Tag();
-            $tag->name_uk = $tag_name_uk;
-            $tag->name_en = $request->get('tag_name_uk')[$key];
-            $tag->slug = $request->get('tag_name_uk')[$key];
+            $tag->slug = $tagSlug;
+            $tag->name_uk = $request->get('tag_name_uk')[$key];
+            $tag->name_en = $request->get('tag_name_en')[$key];
             $tag->save();
         }
 

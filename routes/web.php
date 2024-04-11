@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\MovieController;
 use App\Http\Controllers\Admin\CastController;
 use App\Http\Controllers\Admin\TagController;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+Route::group(['prefix' => LaravelLocalization::setLocale()], function(){
 Route::prefix('admin')->group(function () {
     Route::get('/movies', [MovieController::class, 'index'])->name('admin.movies.index');
     Route::get('/movies/create', [MovieController::class, 'create'])->name('admin.movies.create');
@@ -50,5 +51,5 @@ Route::prefix('admin')->group(function () {
     Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('admin.tags.destroy');
 
 })->middleware(['auth', 'verified']);
-
+});
 require __DIR__.'/auth.php';
